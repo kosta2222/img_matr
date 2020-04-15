@@ -32,14 +32,17 @@ def make_train_matr(p_:str):
 
 def create_nn():
     model = Sequential()
-    model.add(Dense(70, input_dim=10000, activation='sigmoid'))
-    model.add(Dense(70, activation='sigmoid'))
-    model.add(Dense(10000, activation='sigmoid'))
-    return model
+    d0=Dense(70, input_dim=10000, activation='sigmoid')
+    model.add(d0)
+    d1=Dense(70, activation='sigmoid')
+    model.add(d1)
+    d2=Dense(1, input_dim=1, activation='sigmoid')
+    model.add(d2)
+    return (model, d0, d1, d2)
 
 def fit_nn(X,Y):
     new_img=None
-    nn=create_nn()
+    nn, d0, d1, d2=create_nn()
     es=EarlyStopping(monitor='val_accuracy')
     opt=SGD(lr=0.07)
     # opt='adam'
@@ -47,7 +50,7 @@ def fit_nn(X,Y):
     nn.fit(X, Y, epochs=512, validation_split=0.25)
            #, callbacks=[es])
     # vm_proc_print(b_c, locals(), globals())
-    return nn
+    return (nn, d0, d1, d2)
 
 
 def calc_out_nn(l_:list):
@@ -55,6 +58,7 @@ def calc_out_nn(l_:list):
     for i in range(len(l_)):
         val=round(l_[i],1)
         if val > 0.5 :
+            print("op")
             l_tested[i] = 0
         else:
             l_tested[i] = 1
@@ -66,8 +70,12 @@ def make_2d_arr(_1d_arr:list):
         for j in range(100):
             matr_make[i][j] = _1d_arr[i * 100 + j]
     return matr_make
-def pred(X, nn):
-      p_matr=nn.predict(np.array([X]))
+def pred(X,dense0,dense1,dense2):
+      model_new=Sequential()
+      model_new.add(dense0)
+      model_new.add(dense1)
+      model_new.add(dense2)
+      p_matr=model_new.predict(np.array([X]))
       p_vec=p_matr[0]
       p_tested=calc_out_nn(p_vec)
       p_2d_img=make_2d_arr(p_tested)
@@ -78,17 +86,17 @@ def pred(X, nn):
 def main():
     X = make_train_matr('b:/out')
     Y = np.zeros(shape=(4,10000))
-    Y[0][0]=1
-    Y[1][0]=1
-    Y[2][0]=1
-    Y[3][0]=1
-    # Y=np.array([[1], [1], [1], [1]])
-    nn=fit_nn(X, Y)
+    # Y[0][0]=1
+    # Y[1][0]=1
+    # Y[2][0]=1
+    # Y[3][0]=1
+    Y=np.array([[1], [1], [1], [1]])
+    nn, d0, d1, d2=fit_nn(X, Y)
     scores=nn.evaluate(X, Y, verbose=1)
     print("scores",scores)
     # single_vec=np.array(Y[0])
-    single_vec = np.random.randn(10000)
-    pred(single_vec, nn)
+    # single_vec = np.random.randn(10000)
+    pred([1], d2, d1, d0 )
     nn_pred=nn.predict(np.array([X[0]]))
 
 main()
