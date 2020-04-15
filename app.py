@@ -34,7 +34,7 @@ def create_nn():
     model = Sequential()
     model.add(Dense(70, input_dim=10000, activation='sigmoid'))
     model.add(Dense(70, activation='sigmoid'))
-    model.add(Dense(1, activation='sigmoid'))
+    model.add(Dense(10000, activation='sigmoid'))
     return model
 
 def fit_nn(X,Y):
@@ -78,11 +78,11 @@ def pred(X, nn):
 def main():
     X = make_train_matr('b:/out')
     Y = np.zeros(shape=(4,10000))
-    # Y[0][0]=1
-    # Y[1][0]=1
-    # Y[2][0]=1
-    # Y[3][0]=1
-    Y=np.array([[1], [1], [1], [1]])
+    Y[0][0]=1
+    Y[1][0]=1
+    Y[2][0]=1
+    Y[3][0]=1
+    # Y=np.array([[1], [1], [1], [1]])
     nn=fit_nn(X, Y)
     scores=nn.evaluate(X, Y, verbose=2)
     print("scores",scores)
