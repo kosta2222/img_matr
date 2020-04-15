@@ -32,9 +32,9 @@ def make_train_matr(p_:str):
 
 def create_nn():
     model = Sequential()
-    model.add(Dense(30, input_dim=10000, activation='sigmoid'))
+    model.add(Dense(70, input_dim=10000, activation='sigmoid'))
     model.add(Dense(70, activation='sigmoid'))
-    model.add(Dense(10000, activation='sigmoid'))
+    model.add(Dense(1, activation='sigmoid'))
     return model
 
 def fit_nn(X,Y):
@@ -43,7 +43,7 @@ def fit_nn(X,Y):
     es=EarlyStopping(monitor='val_accuracy')
     opt=SGD(lr=0.07)
     # opt='adam'
-    nn.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+    nn.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
     nn.fit(X, Y, epochs=512, validation_split=0.25)
            #, callbacks=[es])
     # vm_proc_print(b_c, locals(), globals())
@@ -78,11 +78,11 @@ def pred(X, nn):
 def main():
     X = make_train_matr('b:/out')
     Y = np.zeros(shape=(4,10000))
-    Y[0][0]=1
-    Y[1][0]=1
-    Y[2][0]=1
-    Y[3][0]=1
-    # Y=np.array([[1], [1], [1], [1]])
+    # Y[0][0]=1
+    # Y[1][0]=1
+    # Y[2][0]=1
+    # Y[3][0]=1
+    Y=np.array([[1], [1], [1], [1]])
     nn=fit_nn(X, Y)
     scores=nn.evaluate(X, Y, verbose=2)
     print("scores",scores)
