@@ -32,8 +32,8 @@ def make_train_matr(p_:str):
 
 def create_nn():
     model = Sequential()
-    model.add(Dense(30, input_dim=10000, activation='relu'))
-    model.add(Dense(70, activation='relu'))
+    model.add(Dense(30, input_dim=10000, activation='sigmoid'))
+    model.add(Dense(70, activation='sigmoid'))
     model.add(Dense(10000, activation='sigmoid'))
     return model
 
@@ -46,7 +46,7 @@ def fit_nn(X,Y):
     nn.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
     nn.fit(X, Y, epochs=512, validation_split=0.25)
            #, callbacks=[es])
-    vm_proc_print(b_c, locals(), globals())
+    # vm_proc_print(b_c, locals(), globals())
     return nn
 
 
@@ -84,10 +84,10 @@ def main():
     Y[3][0]=1
     # Y=np.array([[1], [1], [1], [1]])
     nn=fit_nn(X, Y)
-    scores=nn.evaluate(X, Y, verbose=1)
+    scores=nn.evaluate(X, Y, verbose=2)
     print("scores",scores)
-    single_vec=np.array(Y[0])
-    # single_vec = np.random.randn(1,10000)
+    # single_vec=np.array(Y[0])
+    single_vec = np.random.randn(10000)
     pred(single_vec, nn)
     nn_pred=nn.predict(np.array([X[0]]))
 
