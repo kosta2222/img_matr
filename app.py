@@ -84,7 +84,7 @@ def main():
     Y[3][0]=1
     # Y=np.array([[1], [1], [1], [1]])
     nn=fit_nn(X, Y)
-    scores=nn.evaluate(X, Y, verbose=2)
+    scores=nn.evaluate(X, Y, verbose=1)
     print("scores",scores)
     # single_vec=np.array(Y[0])
     single_vec = np.random.randn(10000)
