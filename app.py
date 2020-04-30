@@ -6,7 +6,7 @@ from keras.optimizers import SGD
 from keras.callbacks import EarlyStopping
 
 from  keras.models import Sequential
-from  keras.layers import Dense
+from  keras.layers import Dense, Input
 import numpy as np
 from vm_print import console, b_c, vm_proc_print
 # console()
@@ -31,15 +31,24 @@ def make_train_matr(p_:str):
   return matr
 
 def create_nn():
-    model = Sequential()
-    d0=Dense(70, input_dim=10000, activation='sigmoid')
-    model.add(d0)
-    d1=Dense(70, activation='sigmoid')
-    model.add(d1)
-    d2=Dense(1, input_dim=1, activation='sigmoid')
-    model.add(d2)
-    return (model, d0, d1, d2)
+    # model = Sequential()
+    # d0=Dense(70, input_dim=10000, activation='sigmoid')
+    # model.add(d0)
+    # d1=Dense(70, activation='sigmoid')
+    # model.add(d1)
+    # d2=Dense(1, activation='sigmoid')
+    # model.add(d2)
+    # return (model, d0, d1, d2)
+    # Start defining the input tensor:
+    inpTensor = Input((3,))
 
+    # create the layers and pass them the input tensor to get the output tensor:
+    hidden1Out = Dense(units=4)(inpTensor)
+    hidden2Out = Dense(units=4)(hidden1Out)
+    finalOut = Dense(units=1)(hidden2Out)
+
+    # define the model's start and end points
+    model = Sequential(inpTensor, finalOut)
 def fit_nn(X,Y):
     new_img=None
     nn, d0, d1, d2=create_nn()
